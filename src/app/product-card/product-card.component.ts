@@ -16,11 +16,14 @@ export class ProductCardComponent {
 
   constructor(private cartService: ShoppingCartService) { }
 
-  addToCart(product: Product) {
+  addToCart() {
     // this.cartService.getOrCreateCartId();
-    this.cartService.addToCart(product);
+    this.cartService.addToCart(this.product);
   }
-
+  removeFromCart() {
+    // this.cartService.getOrCreateCartId();
+    this.cartService.removeFromCart(this.product);
+  }
   getQuantity () {
     if(!this.shoppingCart) return 0;
     let item = this.shoppingCart.items[this.product.key];
