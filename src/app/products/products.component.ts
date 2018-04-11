@@ -22,7 +22,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     ps: ProductService,
     private shoppingCartService: ShoppingCartService 
   ) {
-    
+
     this.sub = ps
     .getAll()
     .switchMap(p => {
@@ -31,17 +31,17 @@ export class ProductsComponent implements OnInit, OnDestroy {
     })
     .subscribe(params => {
       this.category = params.get('category');
-      
+
       this.filteredProducts = (this.category) ?
       this.products.filter(p => p.category === this.category) :
       this.products;
     });
   }
-  
+
   async ngOnInit() {
-    this.sub= (await this.shoppingCartService.getCart()).valueChanges().subscribe(cart => this.cart = cart);
+    this.sub = (await this.shoppingCartService.getCart()).subscribe(cart => this.cart = cart);
   }
-  
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 // import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../auth.service';
 import { ShoppingCartService } from '../shopping-cart.service';
+import { Observable } from 'rxjs/Observable';
+import { ShoppingCart } from '../models/shopping-cart';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -14,26 +16,16 @@ export class NavbarComponent implements OnInit {
   //  user: firebase.User;
   // user$: Observable<firebase.User>;
   appUser: AppUser;
-  shoppingCartItemCount: number ;
+  // shoppingCartItemCount: number ;
+  cart$: Observable<ShoppingCart>;
   constructor(private  auth: AuthService,private shoppingCartService: ShoppingCartService) {
     //  afAuth.authState.subscribe(user => this.user = user);
     // this.user$ = auth.user$;
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.auth.appUser$.subscribe(appUser => this.appUser = appUser);
-    const cart = this.shoppingCartService.getCart();
-    cart.then(
-      cart$ => {
-        cart$.snapshotChanges().subscribe(cartsub => {
-          this.shoppingCartItemCount = 0 ;
-          // tslint:disable-next-line:forin
-          for (const productId in cartsub.payload.val().items) {
-          this.shoppingCartItemCount += cartsub.payload.val().items[productId].quantity;
-        }
-      });
-      }
-    );
+    this.cart$ = await this.shoppingCartService.getCart();
   }
   logout() {
     this.auth.logout();
