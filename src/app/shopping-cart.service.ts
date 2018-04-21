@@ -21,6 +21,7 @@ export class ShoppingCartService {
     const cartId = await this.getOrCreateCartId();
     // console.log(cartId);
     return this.db.object('/shopping-carts/' + cartId).snapshotChanges().map( action => {
+     // console.log(action);
       const key = action.key;
       const items = action.payload.val().items;
       return new ShoppingCart(key, items);
@@ -56,4 +57,5 @@ export class ShoppingCartService {
       item$.update({ product: product, quantity: (item.payload.val()) ? item.payload.val().quantity + change : 0 });
     });
   }
+  
 }
